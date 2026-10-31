@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
@@ -15,9 +15,6 @@
   <!-- Babel Compiler for JSX -->
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
     body {
@@ -27,6 +24,26 @@
 </head>
 <body class="bg-slate-900 text-slate-800 antialiased">
   <div id="root"></div>
+
+  <!-- Firebase Cloud Sync Script -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    window.FirebaseDB = {
+      initializeApp,
+      getAuth,
+      signInAnonymously,
+      signInWithCustomToken,
+      onAuthStateChanged,
+      getFirestore,
+      doc,
+      setDoc,
+      onSnapshot,
+      collection
+    };
+  </script>
 
   <!-- React Application Code -->
   <script type="text/babel">
@@ -41,7 +58,7 @@
         send: `<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>`,
         search: `<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>`,
         plus: `<path d="M5 12h14"/><path d="M12 5v14"/>`,
-        trash2: `<path d="3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>`,
+        trash2: `<path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>`,
         edit3: `<path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>`,
         settings: `<path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/>`,
         store: `<path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/>`,
@@ -56,7 +73,8 @@
         droplet: `<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>`,
         wheat: `<path d="M2 22 16 8"/><path d="M3.47 12.53 5 11l1.53 1.53a3.5 3.5 0 0 1 0 4.94L5 19l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/><path d="M7.47 8.53 9 7l1.53 1.53a3.5 3.5 0 0 1 0 4.94L9 15l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/><path d="M11.47 4.53 13 3l1.53 1.53a3.5 3.5 0 0 1 0 4.94L13 11l-1.53-1.53a3.5 3.5 0 0 1 0-4.94Z"/><path d="M20 4.53 18.47 6 16.94 4.53a3.5 3.5 0 0 1 0-4.94L18.47 1l1.53 1.53a3.5 3.5 0 0 1 0 4.94Z"/><path d="M16 8.53 14.47 10l-1.53-1.53a3.5 3.5 0 0 1 0-4.94L14.47 5l1.53 1.53a3.5 3.5 0 0 1 0 4.94Z"/>`,
         flame: `<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 3.5Z"/>`,
-        star: `<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>`
+        star: `<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>`,
+        cloud: `<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>`
       };
       return (
         <svg 
@@ -125,6 +143,8 @@
 
     const DEFAULT_AI_LOGO = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' width='200' height='200'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%2310b981;stop-opacity:1' /><stop offset='100%' style='stop-color:%23047857;stop-opacity:1' /></linearGradient></defs><circle cx='100' cy='100' r='96' fill='url(%23grad)' stroke='%23f59e0b' stroke-width='6'/><path d='M100 35 C120 70, 165 85, 165 115 A65 65 0 0 1 35 115 C35 85, 80 70, 100 35 Z' fill='%23ffffff' opacity='0.95'/><path d='M100 65 Q115 100 135 110 A35 35 0 0 1 65 110 Q85 100 100 65 Z' fill='%23f59e0b'/><text x='100' y='165' font-family='sans-serif' font-weight='900' font-size='18' fill='%23ffffff' text-anchor='middle' letter-spacing='2'>HỒ HƯƠNG</text></svg>";
 
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzoO38jBKoOmPpwI9Dn26wKSOX7vKpGghJ1NoYwzaq-iIovNjyTDf2uGkKY5Q8SEwi7/exec";
+
     function App() {
       const [viewMode, setViewMode] = useState('storefront');
       const [products, setProducts] = useState(() => {
@@ -156,19 +176,106 @@
       });
       const [contactForm, setContactForm] = useState(contacts);
       const [toastMessage, setToastMessage] = useState('');
+      const [cloudSynced, setCloudSynced] = useState(false);
 
+      // Fetch initial data from Google Apps Script Engine
       useEffect(() => {
-        localStorage.setItem('hh_v3_products', JSON.stringify(products));
-      }, [products]);
+        let unsubscribe = null;
+        
+        // Fetch from Apps Script
+        fetch(GOOGLE_SCRIPT_URL + "?action=getData")
+          .then(res => res.json())
+          .then(data => {
+            if (data) {
+              if (data.products && data.products.length > 0) setProducts(data.products);
+              if (data.contacts) setContacts(data.contacts);
+              if (data.logoUrl) setLogoUrl(data.logoUrl);
+              setCloudSynced(true);
+            }
+          })
+          .catch(err => console.log('Apps Script fetch info:', err));
 
-      useEffect(() => {
-        localStorage.setItem('hh_v3_contacts', JSON.stringify(contacts));
-        setContactForm(contacts);
-      }, [contacts]);
+        const initCloudSync = async () => {
+          if (typeof __firebase_config !== 'undefined' && window.FirebaseDB) {
+            try {
+              const { initializeApp, getAuth, signInAnonymously, signInWithCustomToken, getFirestore, doc, onSnapshot } = window.FirebaseDB;
+              const config = JSON.parse(__firebase_config);
+              const app = initializeApp(config);
+              const auth = getAuth(app);
+              const db = getFirestore(app);
 
-      useEffect(() => {
-        if (logoUrl) localStorage.setItem('hh_v3_logo', logoUrl);
-      }, [logoUrl]);
+              if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                await signInWithCustomToken(auth, __initial_auth_token);
+              } else {
+                await signInAnonymously(auth);
+              }
+
+              const appId = typeof __app_id !== 'undefined' ? __app_id : 'hohuong-store-default';
+              const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'store_data', 'main');
+
+              unsubscribe = onSnapshot(docRef, (docSnap) => {
+                if (docSnap.exists()) {
+                  const data = docSnap.data();
+                  if (data.products) setProducts(data.products);
+                  if (data.contacts) setContacts(data.contacts);
+                  if (data.logoUrl) setLogoUrl(data.logoUrl);
+                }
+                setCloudSynced(true);
+              }, (err) => console.log('Cloud Listen Error:', err));
+            } catch (err) {
+              console.log('Firebase Init Error:', err);
+            }
+          }
+        };
+
+        initCloudSync();
+        return () => { if (unsubscribe) unsubscribe(); };
+      }, []);
+
+      const saveToCloud = async (newProducts, newContacts, newLogo) => {
+        // Save local backup first
+        localStorage.setItem('hh_v3_products', JSON.stringify(newProducts));
+        localStorage.setItem('hh_v3_contacts', JSON.stringify(newContacts));
+        if (newLogo) localStorage.setItem('hh_v3_logo', newLogo);
+
+        // Sync to Google Apps Script Backend
+        try {
+          fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              products: newProducts,
+              contacts: newContacts,
+              logoUrl: newLogo || logoUrl,
+              updatedAt: Date.now()
+            })
+          });
+        } catch(e) {
+          console.error("Apps Script post error", e);
+        }
+
+        // Sync to cloud DB
+        if (typeof __firebase_config !== 'undefined' && window.FirebaseDB) {
+          try {
+            const { initializeApp, getAuth, getFirestore, doc, setDoc } = window.FirebaseDB;
+            const config = JSON.parse(__firebase_config);
+            const app = initializeApp(config);
+            const db = getFirestore(app);
+            const appId = typeof __app_id !== 'undefined' ? __app_id : 'hohuong-store-default';
+
+            const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'store_data', 'main');
+            await setDoc(docRef, {
+              products: newProducts,
+              contacts: newContacts,
+              logoUrl: newLogo || logoUrl,
+              updatedAt: Date.now()
+            }, { merge: true });
+          } catch (e) {
+            console.error("Cloud save failed", e);
+          }
+        }
+      };
 
       const showToast = (msg) => {
         setToastMessage(msg);
@@ -178,9 +285,8 @@
       const handleImageUpload = (e, index) => {
         const file = e.target.files[0];
         if (file) {
-          if (file.size > 4 * 1024 * 1024) {
-            alert('Dung lượng ảnh quá lớn! Vui lòng chọn ảnh nhỏ hơn 4MB.');
-            return;
+          if (file.size > 2 * 1024 * 1024) {
+            alert('Dung lượng ảnh lớn! Hãy chọn ảnh nhỏ hơn 2MB để tải nhanh hơn.');
           }
           const reader = new FileReader();
           reader.onloadend = () => {
@@ -197,8 +303,10 @@
         if (file) {
           const reader = new FileReader();
           reader.onloadend = () => {
-            setLogoUrl(reader.result);
-            showToast('Đã tải logo mới thành công!');
+            const newLogo = reader.result;
+            setLogoUrl(newLogo);
+            saveToCloud(products, contacts, newLogo);
+            showToast('Đã tải và đồng bộ logo mới!');
           };
           reader.readAsDataURL(file);
         }
@@ -233,27 +341,32 @@
           return;
         }
 
+        let updatedProducts;
         if (editingProduct) {
-          setProducts(products.map(p => p.id === editingProduct.id ? {
+          updatedProducts = products.map(p => p.id === editingProduct.id ? {
             ...productForm, id: p.id, price: Number(productForm.price)
-          } : p));
-          showToast('Cập nhật sản phẩm thành công!');
+          } : p);
+          showToast('Đã cập nhật và đồng bộ sản phẩm!');
         } else {
           const newProduct = {
             ...productForm, id: Date.now().toString(), price: Number(productForm.price)
           };
-          setProducts([newProduct, ...products]);
-          showToast('Thêm sản phẩm mới thành công!');
+          updatedProducts = [newProduct, ...products];
+          showToast('Đã thêm sản phẩm mới và đồng bộ!');
         }
 
+        setProducts(updatedProducts);
+        saveToCloud(updatedProducts, contacts, logoUrl);
         setEditingProduct(null);
         setProductForm({ name: '', price: '', category: 'dưỡng da', images: ['', '', ''], description: '', isHot: false });
       };
 
       const handleDeleteProduct = (id) => {
         if (window.confirm('Bạn có chắc muốn xóa sản phẩm này?')) {
-          setProducts(products.filter(p => p.id !== id));
-          showToast('Đã xóa sản phẩm!');
+          const updated = products.filter(p => p.id !== id);
+          setProducts(updated);
+          saveToCloud(updated, contacts, logoUrl);
+          showToast('Đã xóa sản phẩm thành công!');
         }
       };
 
@@ -272,7 +385,8 @@
       const handleSaveContacts = (e) => {
         e.preventDefault();
         setContacts(contactForm);
-        showToast('Cập nhật thông tin liên hệ thành công!');
+        saveToCloud(products, contactForm, logoUrl);
+        showToast('Đã cập nhật và đồng bộ thông tin liên hệ!');
       };
 
       const filteredProducts = products.filter(p => {
@@ -299,7 +413,7 @@
           <div className="bg-slate-950 border-b border-slate-800 text-xs py-2 px-4 sticky top-0 z-40 text-slate-300">
             <div className="max-w-7xl mx-auto flex justify-between items-center">
               <div className="flex items-center space-x-2 text-amber-400 font-medium">
-                <Icon name="sparkles" className="w-4 h-4 text-emerald-400" />
+                <Icon name="cloud" className={`w-4 h-4 ${cloudSynced ? 'text-emerald-400' : 'text-amber-400 animate-pulse'}`} />
                 <span className="hidden sm:inline font-bold tracking-wide">HỒ HƯƠNG FAMILY • DẦU DỪA, GẠO & CÁM</span>
                 <span className="sm:hidden font-bold">HỒ HƯƠNG FAMILY</span>
               </div>
@@ -550,7 +664,7 @@
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
                     <div>
                       <h2 className="text-2xl font-black text-slate-900">Quản Lý Cửa Hàng Hồ Hương</h2>
-                      <p className="text-xs text-slate-500 mt-1">Thay đổi Logo, Quản lý sản phẩm & Cập nhật SĐT/Zalo</p>
+                      <p className="text-xs text-slate-500 mt-1">Thay đổi Logo, Quản lý sản phẩm & Cập nhật SĐT/Zalo (Đồng bộ Đám Mây)</p>
                     </div>
                     <button onClick={handleAdminLogout} className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-xl text-xs font-bold border border-slate-300 self-start sm:self-auto transition">
                       <Icon name="logOut" className="w-4 h-4" />
@@ -629,7 +743,7 @@
 
                         <div className="flex gap-2 pt-2">
                           <button type="submit" className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl text-sm transition shadow-md">
-                            {editingProduct ? 'Cập Nhật' : 'Lưu Sản Phẩm'}
+                            {editingProduct ? 'Cập Nhật & Đồng Bộ' : 'Lưu & Đồng Bộ Sản Phẩm'}
                           </button>
                         </div>
                       </form>
@@ -690,7 +804,7 @@
                         <input type="text" value={contactForm.zalo} onChange={(e) => setContactForm({...contactForm, zalo: e.target.value})} className="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm" />
                       </div>
                       <div className="md:col-span-2">
-                        <button type="submit" className="bg-emerald-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm shadow-md">Lưu Liên Hệ Mới</button>
+                        <button type="submit" className="bg-emerald-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm shadow-md">Lưu & Đồng Bộ Liên Hệ</button>
                       </div>
                     </form>
                   </div>
